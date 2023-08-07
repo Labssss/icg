@@ -1,0 +1,56 @@
+|body {
+    margin:40px;
+}
+
+* {
+box-sizing: border-box;
+}
+
+input {
+    display:block;
+    width: 200px;
+    margin:10px 0;
+    padding:10px;
+}
+
+.input {
+    background-color: #fafafa;
+    border:0;
+    box-shadow:0 0 4px rgba(0,0,0,0.3);
+    transition: .3s box-shadow;
+}
+
+.input:hover {
+    box-shadow:0 0 4px rgba(0,0,0,0.5);
+}
+
+button {
+    display: inline-block;
+    font-weight: 350;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: #0d6efd;
+    border: 1px solid #0d6efd;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: background-color .15s ease-in-out;
+}
+
+button:hover, #download-btn:hover {
+    color: #fff;
+    background-color: #c94d05;
+    border-color: #0a58ca;
+}
+
+#download-btn {
+    background-color: orange;
+    display: none;
+}
