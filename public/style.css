@@ -1,22 +1,35 @@
-|body {
+body {
     margin:40px;
 }
 
 * {
 box-sizing: border-box;
+font-family: 'Merriweather Sans', sans-serif;
 }
 
-input {
-    display:block;
-    width: 200px;
-    margin:10px 0;
-    padding:10px;
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.savableInput {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .input {
+    display:block;
+    width: 200px;
+    margin-top: 10px;
+    padding: 10px;
     background-color: #fafafa;
-    border:0;
-    box-shadow:0 0 4px rgba(0,0,0,0.3);
+    border: 0;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
     transition: .3s box-shadow;
 }
 
@@ -24,10 +37,29 @@ input {
     box-shadow:0 0 4px rgba(0,0,0,0.5);
 }
 
+input[type="checkbox"] {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+label {
+    margin-top: 6px;
+    margin-left: 5px;
+}
+
+.gen-download-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
 button {
     display: inline-block;
     font-weight: 350;
     line-height: 1.5;
+    margin-top: 10px;
     color: #fff;
     text-align: center;
     text-decoration: none;
@@ -53,4 +85,16 @@ button:hover, #download-btn:hover {
 #download-btn {
     background-color: orange;
     display: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

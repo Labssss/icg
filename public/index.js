@@ -1,4 +1,47 @@
-initDate();
+window.onload = function () {
+    initDate();
+    const checkboxCard = document.querySelector('.checkboxCard')
+    if (localStorage.getItem("SaveCard")) {
+        checkboxCard.checked = JSON.parse(localStorage.getItem("SaveCard")).checked
+        card.unmaskedValue = JSON.parse(localStorage.getItem("SaveCard")).lastvalue
+    } else {
+        localStorage.setItem("SaveCard", JSON.stringify({checked: false, lastvalue: ''}))
+    }
+
+    const checkboxSaldo = document.querySelector('.checkboxSaldo')
+    if (localStorage.getItem("SaveSaldo")) {
+        checkboxSaldo.checked = JSON.parse(localStorage.getItem("SaveSaldo")).checked
+        saldo.unmaskedValue = JSON.parse(localStorage.getItem("SaveSaldo")).lastvalue
+    } else {
+        localStorage.setItem("SaveSaldo", JSON.stringify({checked: false, lastvalue: ''}))
+    }
+}
+
+const price = new IMask(
+    document.querySelector('.price'),
+    {
+      mask: Number,
+      min: 0,
+      max: 1000000,
+    }
+)
+
+const card = new IMask(
+    document.querySelector('.card'),
+    {
+      mask: '0000 0000',
+      overwrite: 'shift'
+    }
+)
+
+const saldo = new IMask(
+    document.querySelector('.saldo'),
+    {
+      mask: '0[00][,][00]',
+      overwrite: 'shift'
+    }
+)
+
 const check = {
     card: "",
     price: 0,
@@ -9,15 +52,16 @@ const check = {
     price_2: 0,
     pln_step: 0
 }
+
 function generateImg() {
-    check.price = `-${form.querySelector('.price').value}`
-    check.date = form.querySelector('.date').value;
-    check.card = `${getNumber(4)} ${getNumber(4)}`
-    check.saldo = `${getRandomInt(1,1000)},${getRandomInt(0,10)}${getRandomInt(1,10)} PLN`
-    check.date_waluty = form.querySelector('.date').value;
+    check.price = `-${price.value}`
+    check.date = formatDateToScreen(form.querySelector('.date').value);
+    check.card = card.value ? card.value : `${getNumber(4)} ${getNumber(4)}`
+    check.saldo = saldo.value ? `${saldo.value} PLN` : `${getRandomInt(1,1000)},${getRandomInt(0,10)}${getRandomInt(1,10)} PLN`
+    check.date_waluty = formatDateToScreen(form.querySelector('.date').value);
     check.number_ref = `05272423213283${getNumber(9)}`
     check.price_2 = `${form.querySelector('.price').value} PLN`
-    check.pln_step = form.querySelector('.price').value.toString().length - 1
+    check.pln_step = price.value.toString().length - 1
 
     const obj = {
         "files": [ 
@@ -81,6 +125,35 @@ form.addEventListener('submit', (e) => {
     generateImg()
 });
 
+form.oninput = function(event) { 
+    if (event.target.type == "checkbox") { 
+        let t = event.target; 
+        switch (t.className) {
+            case 'checkboxCard':
+                t.checked ? localStorage.setItem("SaveCard", JSON.stringify({checked: true, lastvalue: card.value})) : localStorage.setItem("SaveCard", JSON.stringify({checked: false, lastvalue: ''}))
+                break
+            case 'checkboxSaldo':
+                t.checked ? localStorage.setItem("SaveSaldo", JSON.stringify({checked: true, lastvalue: saldo.value})) : localStorage.setItem("SaveSaldo", JSON.stringify({checked: false, lastvalue: ''}))
+                break
+      }
+    }
+
+    if (event.target.type == "text") { 
+        let t = event.target;
+        let checkbox; 
+        switch (t.className) {
+            case 'input card':
+                checkbox = JSON.parse(localStorage.getItem("SaveCard")).checked
+                checkbox ? localStorage.setItem("SaveCard", JSON.stringify({ ...JSON.parse(localStorage.getItem("SaveCard")), lastvalue: card.value })) : ''
+                break
+            case 'input saldo':
+                checkbox = JSON.parse(localStorage.getItem("SaveSaldo")).checked
+                checkbox ? localStorage.setItem("SaveSaldo", JSON.stringify({ ...JSON.parse(localStorage.getItem("SaveSaldo")), lastvalue: saldo.value })) : ''
+                break
+      }
+    }
+};
+
 function initDate() {
     const input = document.querySelector(".date")
     let d = new Date(),
@@ -93,9 +166,9 @@ function initDate() {
     if (day.length < 2) 
         day = '0' + day;
 
-    input.value = [day, month, year].join('.');
-    // input.value = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
+    input.value = [year, month, day].join('-');
 }
+
 function getNumber(n) {
     let number = '';
     for(let i = 0; i < n; i++) {
@@ -108,4 +181,18 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+}
+
+function formatDateToScreen(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [day, month, year].join('.');
 }
