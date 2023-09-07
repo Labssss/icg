@@ -97,7 +97,8 @@ window.addEventListener("message", function(e) {
         var imageUrl = urlCreator.createObjectURL(blob);
         var img = document.querySelector("#photo");
         img.src = imageUrl;
-        btn.style.display = "inline-block"
+        downloadBtn.style.display = "inline-block"
+        copyBtn.style.display = "inline-block"
         link.download = `${check.price}`
         link.href = imageUrl;
         console.log(imageUrl)
@@ -105,15 +106,26 @@ window.addEventListener("message", function(e) {
     console.log(e) 
 });
 
-let btn = document.querySelector("#download-btn");
+let downloadBtn = document.querySelector("#download-btn");
+let copyBtn = document.querySelector("#copy-btn");
 let link = document.querySelector("#link");
 
-btn.addEventListener("click", function (e) {
+const img = new Image();
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+
+downloadBtn.addEventListener("click", function (e) {
     link.click();
+})
+
+copyBtn.addEventListener("click", function (e) {
+    copyToClipboard(link.href);
 })
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
+    downloadBtn.style.display = "none"
+        copyBtn.style.display = "none"
     if (document.querySelector('.iframe')) {
         document.querySelector('.iframe').remove()
     }
@@ -153,6 +165,35 @@ form.oninput = function(event) {
       }
     }
 };
+
+async function copyToClipboard(src) {
+    const image = await writeToCanvas(src);
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [image.type]: image,
+        })
+      ]);
+  
+      console.log("Success copy");
+    } catch(e) {
+      console.log("Copy failed: " + e);
+    }
+}
+
+function writeToCanvas(src) {
+    return new Promise((res, rej) => {
+      img.src = src;
+      img.onload = function() {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img,0,0)
+        canvas.toBlob((blob) => {
+          res(blob);
+        }, 'image/png');
+      }
+    });
+}
 
 function initDate() {
     const input = document.querySelector(".date")

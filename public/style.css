@@ -76,7 +76,7 @@ button {
     transition: background-color .15s ease-in-out;
 }
 
-button:hover, #download-btn:hover {
+button:hover, #download-btn:hover, #copy-btn:hover {
     color: #fff;
     background-color: #c94d05;
     border-color: #0a58ca;
@@ -85,7 +85,18 @@ button:hover, #download-btn:hover {
 #download-btn {
     background-color: orange;
     display: none;
+    padding: 3px;
 }
+
+#copy-btn {
+    background-color: rgb(31, 129, 35);
+    display: none;
+}
+
+#copy-btn:active, #generate-btn:active {
+    padding: 5px 11px 5px 11px;
+    /* transform: translateY(2px); */
+  }
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
